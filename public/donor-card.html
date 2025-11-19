@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Result Management System</title>
+  <style>
+    body { 
+      font-family: Calibri, Arial, Helvetica, sans-serif; 
+      margin: 24px; 
+      color: #111; 
+      background: #fff; 
+      font-size: 11px; 
+    }
+    .container { 
+      border: 1px solid #dcdcdc; 
+      max-width: 840px; 
+      margin: 0 auto; 
+      padding: 18px 22px; 
+    }
+    .brand { text-align: center; }
+    .brand .header-img { max-width: 360px; width: 100%; height: auto; display: block; margin: 0 auto 6px; }
+    .report-title { text-align: center; font-weight: 600; font-size: 14px; }
+    .term-field { text-align: center; font-weight: bold; margin: 10px 0 15px; font-size: 14px; }
+    .section-heading { font-weight: 700; margin: 8px 0 6px; font-size: 14px; }
+    .top { display: grid; 
+      grid-template-columns: 1fr 135px;   /* was 120px → now 135px */
+      gap: 8px;                           /* reduced gap from 14px → 8px */
+      align-items: start; 
+      margin-left: -12px;}
+    .photo { width: 120px; height: 120px; border: 1px solid #111; background: #0b5a7a; display: flex; align-items: center; justify-content: center; color: white; overflow: hidden; }
+    .photo img { width: 100%; height: 100%; object-fit: cover; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
+    .kv { display: grid; grid-template-columns: 90px 1fr; align-items: center; }
+    .kv label { font-size: 14px; color: #000; }
+    input[type="text"], input[type="number"] { width: 100%; padding: 4px 6px; border: 1px dotted #777; font-size: 11px; }
+    input[type="file"] { width: 100%; margin-top: 6px; }
+    table.card { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; border: 2px solid #111; table-layout: fixed; }
+    table.card th, table.card td { border: 1px dotted #777; padding: 6px 8px; text-align: center; }
+    table.card th + th, table.card td + td { border-left: 1px solid #111; }
+    table.card td:last-child { border-top: none; border-bottom: none; }
+    table.card td:nth-child(3) input,
+    table.card td:last-child input { border: none; width: 85%; padding: 4px 2px; background: transparent; }
+    table.card td:nth-child(3) input:focus,
+    table.card td:last-child input:focus { outline: none; }
+    table.card thead th { border-bottom: 1px solid #111; }
+    table.card td input { text-align: center; }
+    table.card th { background: #f5f5f5; }
+    .row-actions { display: flex; flex-wrap: nowrap; gap: 8px; justify-content: flex-start; margin-top: 12px; overflow-x: auto; padding: 6px 0; white-space: nowrap; min-height: 48px; align-items: center; }
+    .row-actions button { flex: 1 1 auto; min-width: 100px; white-space: nowrap; }
+    button { padding: 8px 12px; border: 1px solid #1f2937; background: #1f2937; color: white; cursor: pointer; border-radius: 4px; font-size: 11px; }
+    button.secondary { background: white; color: #1f2937; }
+    #status-message { margin-top: 16px; padding: 10px; border-radius: 4px; text-align: center; font-weight: bold; clear: both; }
+    .remarks-input { width: 100%; border: none; border-bottom: 1px dotted #777; padding: 4px 0; background: transparent; font-size: 11px; }
+    .signature-line { border-bottom: 1px dotted #777; height: 20px; }
+    .photo-label { display: block; text-align: center; margin-top: 6px; font-size: 12px; color: #1f2937; cursor: pointer; }
+    .principal-sign { display: flex; align-items: center; gap: 10px; }
+    .principal-sign img { width: 150px; height: auto; }
+    .donor-bar { background: #000; color: #fff; padding: 5px 0; font-weight: bold; font-size: 14pt; margin: 25px 0 15px; display: flex; gap: 60px; align-items: center; }
+    .donor-bar input { font-size: 14px !important; }
+
+    .footer { margin-top: 20px; text-align: center; font-size: 15px; color: #333; line-height: 1.6; }
+    .footer .social { display: flex; justify-content: center; gap: 25px; flex-wrap: nowrap; margin-bottom: 8px; font-size: 15px; }
+    .footer .address { font-size: 12px; color: #444; margin-top: 5px; }
+
+    /* PERFECT SINGLE-PAGE PRINT - NO BLANK PAGE */
+       /* PERFECT SINGLE-PAGE PRINT - EXACTLY LIKE FRONTEND - NO EXTRA PAGE */
+       @media print {
+        @page {
+          size: A4 portrait;
+          margin: 0 !important;
+        }
+        
+        html, body {
+          margin: 0 !important;
+          padding: 0 !important;
+          width: 210mm !important;
+          height: 297mm !important;
+          overflow: hidden !important;
+          background: white !important;
+        }
+  
+        .container {
+          border: none !important;
+          padding: 0 12mm !important;      /* Equal left & right margin */
+          margin: 0 auto !important;       /* Perfectly centered */
+          width: 186mm !important;         /* 210mm - 12mm left - 12mm right = 186mm */
+          max-width: none !important;
+          box-sizing: border-box !important;
+        }
+  
+        /* Hide all buttons & interactive elements */
+        .no-print, .row-actions, input[type="file"], .photo-label, #status-message {
+          display: none !important;
+        }
+  
+        /* Clean inputs */
+        input {
+          border: none !important;
+          background: transparent !important;
+        }
+  
+        /* Table: only outer border */
+        table.card {
+          border: 2px solid #111 !important;
+        }
+        table.card th,
+        table.card td {
+          border: none !important;
+        }
+        table.card th {
+          background: transparent !important;
+        }
+  
+        /* Keep photo alignment */
+        .top {
+          margin-left: -3mm !important;
+        }
+  
+        /* Donor bar black background */
+        .donor-bar {
+          background: #000 !important;
+          color: white !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+        .donor-bar input {
+          color: white !important;
+          background: transparent !important;
+          border: none !important;
+          font-weight: bold !important;
+        }
+  
+        /* Force exact colors */
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          color-adjust: exact !important;
+        }
+      }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="brand">
+      <img src="head-donor.PNG" alt="School Header" class="header-img" />
+    </div>
+    <div class="report-title">Progress Report</div>
+    <div class="term-field">
+      <input id="Term" name="Term" type="text" placeholder="e.g., 1st Term Examination"
+             style="border:none;background:transparent;font-weight:bold;text-align:center;width:100%;font-size:14px;" />
+    </div>
+
+    <form id="card-form">
+      <div class="section-heading">Student Info:</div>
+      <hr style="background:#000;height:1px;margin:8px 0;">
+      <div class="top">
+        <div>
+          <div class="grid2">
+            <div class="kv"><label for="RollNo">USS ID:</label><input id="RollNo" name="roll" type="text" required /></div>
+            <div class="kv"><label for="Name">Student Name:</label><input id="Name" name="name" type="text" /></div>
+            <div class="kv"><label for="AdmissionDate">Admission Date:</label><input id="AdmissionDate" name="AdmissionDate" type="text" placeholder="dd-mm-yyyy"/></div>
+            <div class="kv"><label for="Class">Class:</label><input id="Class" name="class" type="text" /></div>
+            <div class="kv"><label for="Session">Session:</label><input id="Session" name="session" type="text" /></div>
+          </div>
+        </div>
+        <div>
+          <div class="photo"><img id="photoPreview" alt="Student Photo" /></div>
+          <label for="studentPhoto" class="photo-label">Upload Photo</label>
+          <input id="studentPhoto" name="photo" type="file" accept="image/*" onchange="onPhotoChange(event)" />
+        </div>
+      </div>
+
+      <div class="report-title">Scores</div>
+      <table class="card">
+        <thead><tr><th>S.NO</th><th>Subjects</th><th>Total Marks</th><th>Obtained Marks</th></tr></thead>
+        <tbody id="subjects-tbody"></tbody>
+      </table>
+
+      <br>
+      <div class="grid2">
+        <div class="kv"><label for="Percentage"><b>Percentage:</b></label><u><input id="Percentage" name="Percentage" type="text" readonly /></u></div>
+        <div class="kv"><label for="Grade">Grade:</label><input id="Grade" name="Grade" type="text" readonly /></div>
+      </div>
+
+      <div class="grid2" style="gap:8px 14px; margin-top:10px;">
+        <div class="kv" style="grid-column: 1 / span 2;">
+          <label for="Remarks">Remarks:</label>
+          <input id="Remarks" name="remarks" type="text" class="remarks-input" />
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:8px; gap:8px 14px;">
+        <div class="kv"><label>Teacher's Sign:</label><div class="signature-line"></div></div>
+        <div class="kv"><label>Principal's Sign:</label>
+          <div class="principal-sign">
+            <img src="sign.PNG" alt="Principal Signature" />
+            <div class="signature-line"></div>
+          </div>
+        </div>
+      </div>
+      <div><br></div>
+      <div><br></div>
+      <div class="donor-bar">
+        <div> <label style="color: white; font-weight: bold; margin: 0; white-space: nowrap; font-size: 16px;">
+          Donor ID :
+        </label> <input title="DonorID" name="DonorID" type="text" value="" style="background:transparent;border:none;color:white;font-weight:bold;width:140px;"></div>
+        <div> <label style="color: white; font-weight: bold; margin: 0; white-space: nowrap; font-size: 16px;">
+          Name :
+        </label> <input title="DonorName" name="DonorName" type="text" value="" style="background:transparent;border:none;color:white;font-weight:bold;width:260px;"></div>
+      </div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+
+
+      <div style="margin-top: 25px; text-align: center; font-size: 16px; color: #686161; line-height: 1.6;">
+        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: nowrap; margin-bottom: 6px;">
+          <span><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1280px-Facebook_f_logo_%282019%29.svg.png" alt="FB" style="width:12px;height:12px;"> /Uniqueschoolsystem1</span><p>         </p><p>         </p><p>         </p>
+          <span><img src="https://cdn-icons-png.flaticon.com/512/15/15874.png" alt="phone" style="width:12px;height:12px;"> +923445153406</span><p>                  </p><p>         </p><p>         </p>
+          <span><img src="https://cdn-icons-png.flaticon.com/512/732/732223.png" alt="email" style="width:12px;height:12px;"> uschools.pk@gmail.com</span>
+        </div>
+        <div style="font-size: 11px; color: #444;">
+          Address : Unique school system, Main Lehtrar road, Punjgran, Islamabad, Pakistan.
+        </div>
+      </div>
+
+      <div class="row-actions no-print">
+        <button type="button" class="secondary" onclick="clearForm()">New Student</button>
+        <button type="button" class="secondary" onclick="loadByRoll()">Load Student</button>
+        <button type="button" onclick="saveData()">Save Data</button>
+        <button type="button" class="secondary" onclick="printCard()">Print Card</button>
+        <button type="button" style="background-color: #f5f5f5;" ><a href="index.html">Simple Card</a></button>
+        
+      </div>
+      <div id="status-message"></div>
+    </form>
+  </div>
+
+  <script>
+    const MARKS = {
+      1: { default: 100, Nazra: 50 },
+      2: { default: 100, Nazra: 50 },
+      3: { default: 100, Nazra: 50 },
+      4: { default: 100, Nazra: 50 },
+      5: { default: 100, Nazra: 50 },
+      6: { default: 100, Nazra: 50 },
+      7: { default: 100, Nazra: 50 },
+      8: { default: 75, Physics: 65, Chemistry: 65, Computer: 65, "Pakistan Studies": 50, Islamiat: 50, "Tarjama-tul-Quran": 50 },
+      9: { default: 75, Physics: 65, Chemistry: 65, Computer: 65, "Pakistan Studies": 50, Islamiat: 50, "Tarjama-tul-Quran": 50 },
+      10: { default: 75, Physics: 65, Chemistry: 65, Computer: 65, "Pakistan Studies": 50, Islamiat: 50 },
+      11: { default: 100, "Pakistan Studies": 50, Islamiat: 50, "Tarjama-tul-Quran": 50 }
+    };
+
+    function getSubjectConfig(classNum) {
+      classNum = parseInt(classNum) || 0;
+      const marks = MARKS[classNum] || { default: 75 };
+
+      if (["Prep", "KG", "Nursery"].includes(String(classNum))) {
+        return [
+          {display:"English (Oral)",       field:"EnglishOral",      max:10},
+          {display:"English (Written)",    field:"EnglishWritten",   max:75},
+          {display:"Math (Oral)",          field:"MathOral",         max:10},
+          {display:"Math (Written)",       field:"MathWritten",      max:75},
+          {display:"Urdu (Oral)",          field:"UrduOral",         max:10},
+          {display:"Urdu (Written)",       field:"UrduWritten",      max:75},
+          {display:"Drawing",              field:"Drawing",          max:75},
+          {display:"Quraan Pak",           field:"Nazra",            max:50}
+        ];
+      }
+
+      if (classNum >= 1 && classNum <= 3) {
+        return [
+          {display: "Quraan Pak", field: "Nazra", max: marks.Nazra},
+          {display: "English", field: "English", max: marks.default},
+          {display: "Urdu", field: "Urdu", max: marks.default},
+          {display: "Mathematics", field: "Math", max: marks.default},
+          {display: "Computer", field: "Computer", max: marks.default},
+          {display: "General Knowledge", field: "GeneralKnowledge", max: marks.default},
+          {display: "Islamiyat", field: "Islamiat", max: marks.default},
+          {display: "Summer Task", field: "SummerTask", max: 20},
+        ];
+      }
+      if (classNum >= 4 && classNum <= 5) {
+        return [
+          {display: "Quraan Pak", field: "Nazra", max: marks.Nazra},
+          {display: "English", field: "English", max: marks.default},
+          {display: "Urdu", field: "Urdu", max: marks.default},
+          {display: "Mathematics", field: "Math", max: marks.default},
+          {display: "Computer", field: "Computer", max: marks.default},
+          {display: "Science", field: "Science", max: marks.default},
+          {display: "Social Studies", field: "Sst", max: marks.default},
+          {display: "Islamiyat", field: "Islamiat", max: marks.default},
+        ];
+      }
+      if (classNum >= 6 && classNum <= 7) {
+        return [
+          {display: "English", field: "English", max: marks.default},
+          {display: "Urdu", field: "Urdu", max: marks.default},
+          {display: "Mathematics", field: "Math", max: marks.default},
+          {display: "Science", field: "Science", max: marks.default},
+          {display: "Computer", field: "Computer", max: marks.default},
+          {display: "Geography", field: "Geography", max: marks.default},
+          {display: "Islamiyat", field: "Islamiat", max: marks.default},
+          {display: "Quraan Pak", field: "Nazra", max: marks.Nazra},
+        ];
+      }
+
+      const config = [
+        {display: "English", field: "English", max: marks.English || marks.default},
+        {display: "Urdu", field: "Urdu", max: marks.Urdu || marks.default},
+        {display: "Mathematics", field: "Math", max: marks.Math || marks.default},
+        {display: "Biology/Computer", field: "Computer", max: marks.Computer || marks.default},
+        {display: "Chemistry", field: "Chemistry", max: marks.Chemistry || marks.default},
+        {display: "Physics", field: "Physics", max: marks.Physics || marks.default},
+        {display: "Islamiyat", field: "Islamiat", max: marks.Islamiat || marks.default},
+      ];
+      if (classNum <= 9) config.push({display: "Tarjama-tul-Quran", field: "Tarjama-tul-Quran", max: marks["Tarjama-tul-Quran"] || 50});
+      if (classNum >= 8) config.push({display: "Pakistan Studies", field: "PakistanStudies", max: marks["Pakistan Studies"] || marks.default});
+      if (classNum === 11) config.push({display: "Statistics", field: "Statistics", max: marks.Statistics || marks.default});
+      return config;
+    }
+
+    function renderSubjects(classNum, studentData = {}) {
+      const tbody = document.getElementById('subjects-tbody');
+      tbody.innerHTML = '';
+      const config = getSubjectConfig(classNum);
+
+      config.forEach((sub, i) => {
+        const fieldKey = sub.field;
+        const obtained = studentData[fieldKey] !== undefined ? studentData[fieldKey] : '';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${i+1}</td>
+          <td>${sub.display}</td>
+          <td><input type="number" class="total-marks" value="${sub.max}" readonly style="background:transparent;border:none;width:60px;text-align:center;"></td>
+          <td><input type="number" name="${fieldKey}" value="${obtained}" min="0" class="obtained-marks" style="width:70px;" onchange="calc()" oninput="calc()"></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const totalRow = document.createElement('tr');
+      totalRow.innerHTML = `
+        <td colspan="2"><strong>Total</strong></td>
+        <td id="MaxMarks" readonly><strong></strong></td>
+        <td id="Total" readonly><strong>0</strong></td>
+      `;
+      tbody.appendChild(totalRow);
+
+      calc();
+    }
+
+    function calc() {
+      const rows = Array.from(document.querySelectorAll('table.card tbody tr'));
+      let obtainedTotal = 0, maxTotal = 0;
+      let passedAll = true;
+
+      rows.slice(0, -1).forEach(tr => {
+        const capInput = tr.querySelector('td:nth-child(3) input');
+        const cap = capInput ? Math.max(0, Number(capInput.value) || 0) : 0;
+        maxTotal += cap;
+
+        const input = tr.querySelector('td:last-child input');
+        let val = input ? Number(input.value) : 0;
+        if (!Number.isFinite(val)) val = 0;
+        const clamped = Math.max(0, Math.min(cap, val));
+        if (input && clamped !== val) input.value = clamped;
+        obtainedTotal += clamped;
+
+        if (cap > 0) {
+          const subjPerc = (clamped / cap) * 100;
+          if (subjPerc < 40) passedAll = false;
+        }
+      });
+
+      document.getElementById('MaxMarks').textContent = maxTotal;
+      document.getElementById('Total').textContent = obtainedTotal;
+
+      const percentage = maxTotal > 0 ? (obtainedTotal / maxTotal) * 100 : 0;
+      document.getElementById('Percentage').value = percentage.toFixed(2) + '%';
+
+      let grade = 'F';
+      if (passedAll) {
+        if (percentage > 85) grade = 'A+';
+        else if (percentage > 71) grade = 'B';
+        else if (percentage > 55) grade = 'C';
+        else if (percentage >= 40) grade = 'D';
+      } else {
+        grade = 'F';
+      }
+
+      document.getElementById('Grade').value = grade;
+    }
+
+    async function loadByRoll() {
+      const roll = document.getElementById('RollNo').value.trim();
+      if (!roll) return alert('Enter USS ID / Roll No');
+
+      try {
+        const res = await fetch(`/student/${encodeURIComponent(roll)}`);
+        if (!res.ok) throw new Error('Not found');
+        const data = await res.json();
+
+        document.getElementById('RollNo').value = data.roll || roll;
+        document.getElementById('Name').value = data.Name || '';
+        document.getElementById('Class').value = data.Class || '';
+        document.getElementById('AdmissionDate').value = data.AdmissionDate || '';
+        document.getElementById('Session').value = data.Session || '';
+        document.getElementById('Remarks').value = data.Remarks || '';
+
+        document.querySelector('input[name="DonorID"]').value = data['Donor ID'] || data.DonorID || '';
+        document.querySelector('input[name="DonorName"]').value = data['Donor Name'] || data.DonorName || '';
+
+        if (data.ImagePath) {
+          document.getElementById('photoPreview').src = data.ImagePath;
+        }
+
+        renderSubjects(data.Class || 5, data);
+        alert('Student loaded successfully!');
+      } catch (e) {
+        alert('Student not found');
+      }
+    }
+
+    function clearForm() {
+      document.getElementById('card-form').reset();
+      document.getElementById('photoPreview').src = '';
+      renderSubjects(5);
+    }
+
+    function onPhotoChange(e) {
+      if (e.target.files[0]) {
+        document.getElementById('photoPreview').src = URL.createObjectURL(e.target.files[0]);
+      }
+    }
+
+    function printCard() { window.print(); }
+
+    function openDonorCard() {
+      const data = {
+        roll: document.getElementById('RollNo').value,
+        Name: document.getElementById('Name').value,
+        Class: document.getElementById('Class').value,
+        Session: document.getElementById('Session').value,
+        'Donor ID': document.querySelector('input[name="DonorID"]').value,
+        'Donor Name': document.querySelector('input[name="DonorName"]').value,
+        ImagePath: document.getElementById('photoPreview').src
+      };
+    
+      document.querySelectorAll('#subjects-tbody input[name]').forEach(inp => {
+        data[inp.name] = inp.value;
+      });
+    
+      sessionStorage.setItem('donorCardData', JSON.stringify(data));
+      window.open('donor-card.html?showDonorBar=true', '_blank');
+    }
+
+    async function saveData() {
+      alert('Save function ready — connect to your backend');
+    }
+
+    window.onload = () => {
+      document.getElementById('Class').addEventListener('change', () => {
+        const classNum = document.getElementById('Class').value;
+        renderSubjects(classNum);
+      });
+      renderSubjects(5);
+    };
+  </script>
+</body>
+</html>
