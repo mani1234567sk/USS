@@ -5,28 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Result Management System</title>
   <style>
-    body { 
-      font-family: Calibri, Arial, Helvetica, sans-serif; 
-      margin: 24px; 
-      color: #111; 
-      background: #fff; 
-      font-size: 11px; 
+    body {
+      font-family: Calibri, Arial, Helvetica, sans-serif;
+      margin: 24px;
+      color: #111;
+      background: #fff;
+      font-size: 11px;
     }
-    .container { 
-      border: 1px solid #dcdcdc; 
-      max-width: 840px; 
-      margin: 0 auto; 
-      padding: 18px 22px; 
+    .container {
+      border: 1px solid #dcdcdc;
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 18px 22px;
     }
     .brand { text-align: center; }
     .brand .header-img { max-width: 360px; width: 100%; height: auto; display: block; margin: 0 auto 6px; }
-    .report-title { text-align: center; font-weight: 600; font-size: 14px; }
+    .report-title { text-align: center; font-weight: 600; font-size: 20px; }
     .term-field { text-align: center; font-weight: bold; margin: 10px 0 15px; font-size: 14px; }
     .section-heading { font-weight: 700; margin: 8px 0 6px; font-size: 14px; }
-    .top { display: grid; 
-      grid-template-columns: 1fr 135px;   /* was 120px → now 135px */
-      gap: 8px;                           /* reduced gap from 14px → 8px */
-      align-items: start; 
+    .top { display: grid;
+      grid-template-columns: 1fr 135px; /* was 120px → now 135px */
+      gap: 8px; /* reduced gap from 14px → 8px */
+      align-items: start;
       margin-left: -12px;}
     .photo { width: 120px; height: 120px; border: 1px solid #111; background: #0b5a7a; display: flex; align-items: center; justify-content: center; color: white; overflow: hidden; }
     .photo img { width: 100%; height: 100%; object-fit: cover; }
@@ -36,7 +36,11 @@
     input[type="text"], input[type="number"] { width: 100%; padding: 4px 6px; border: 1px dotted #777; font-size: 11px; }
     input[type="file"] { width: 100%; margin-top: 6px; }
     table.card { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; border: 2px solid #111; table-layout: fixed; }
-    table.card th, table.card td { border: 1px dotted #777; padding: 6px 8px; text-align: center; }
+ 
+ 
+ 
+ 
+    table.card th, table.card td { border: 1px #777; padding: 6px 8px; text-align: center; }
     table.card th + th, table.card td + td { border-left: 1px solid #111; }
     table.card td:last-child { border-top: none; border-bottom: none; }
     table.card td:nth-child(3) input,
@@ -56,13 +60,47 @@
     .photo-label { display: block; text-align: center; margin-top: 6px; font-size: 12px; color: #1f2937; cursor: pointer; }
     .principal-sign { display: flex; align-items: center; gap: 10px; }
     .principal-sign img { width: 150px; height: auto; }
-    .donor-bar { background: #000; color: #fff; padding: 5px 0; font-weight: bold; font-size: 14pt; margin: 25px 0 15px; display: flex; gap: 60px; align-items: center; }
+    .donor-bar { background: #000; color: #fff; padding: 5px 0; font-weight: bold; font-size: 14px; margin: 25px 0 15px; display: flex; gap: 60px; align-items: center;}
     .donor-bar input { font-size: 14px !important; }
-
     .footer { margin-top: 20px; text-align: center; font-size: 15px; color: #333; line-height: 1.6; }
     .footer .social { display: flex; justify-content: center; gap: 25px; flex-wrap: nowrap; margin-bottom: 8px; font-size: 15px; }
     .footer .address { font-size: 12px; color: #444; margin-top: 5px; }
-
+    @media print {
+      table.card th,
+      table.card td {
+        border: 1px #777 !important;
+      }
+   
+      table.card th + th,
+      table.card td + td {
+        border-left: 1px solid #111 !important;
+      }
+     
+    }
+    @media print {
+      /* remove dotted borders from all rows first */
+      table.card tbody tr td {
+        border-bottom: none !important;
+      }
+   
+      /* FIRST VISIBLE DATA ROW dotted line */
+      table.card tbody tr:first-child td {
+        border-bottom: 1px #000 !important;
+      }
+   
+      /* LAST ROW dotted line */
+      table.card tbody tr:last-child td {
+        border-bottom: 1px dotted #000 !important;
+      }
+   
+      /* Keep header clean */
+      table.card thead tr th {
+        border-bottom: 1px solid #000 !important;
+      }
+    }
+   
+   
+   
     /* PERFECT SINGLE-PAGE PRINT - NO BLANK PAGE */
        /* PERFECT SINGLE-PAGE PRINT - EXACTLY LIKE FRONTEND - NO EXTRA PAGE */
        @media print {
@@ -70,7 +108,7 @@
           size: A4 portrait;
           margin: 0 !important;
         }
-        
+       
         html, body {
           margin: 0 !important;
           padding: 0 !important;
@@ -79,50 +117,81 @@
           overflow: hidden !important;
           background: white !important;
         }
-  
+ 
         .container {
           border: none !important;
-          padding: 0 12mm !important;      /* Equal left & right margin */
-          margin: 0 auto !important;       /* Perfectly centered */
-          width: 186mm !important;         /* 210mm - 12mm left - 12mm right = 186mm */
+          padding: 0 12mm !important; /* Equal left & right margin */
+          margin: 0 auto !important; /* Perfectly centered */
+          width: 186mm !important; /* 210mm - 12mm left - 12mm right = 186mm */
           max-width: none !important;
           box-sizing: border-box !important;
         }
-  
+        .donor-bar {
+          display: flex !important;
+          flex-direction: row !important;
+          justify-content: flex-start !important;
+          align-items: center !important;
+          gap: 20px !important;
+          background: black !important;
+          color: white !important;
+          padding: 5px 20px !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+     
+        /* Make sure Donor ID + Donor Name stay in one single line */
+        .donor-bar div {
+          display: flex !important;
+          flex-direction: row !important;
+          gap: 5px !important;
+          white-space: nowrap !important; /* ====== IMPORTANT ====== */
+          align-items: center !important;
+        }
+     
+        /* Make the input text visible in print */
+        .donor-bar input {
+          color: white !important;
+          background: transparent !important;
+          font-weight: bold !important;
+          border: none !important;
+          width: auto !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          white-space: nowrap !important;
+        }
         /* Hide all buttons & interactive elements */
         .no-print, .row-actions, input[type="file"], .photo-label, #status-message {
           display: none !important;
         }
-  
+ 
         /* Clean inputs */
         input {
           border: none !important;
           background: transparent !important;
         }
-  
+ 
         /* Table: only outer border */
         table.card {
           border: 2px solid #111 !important;
         }
-        table.card th,
-        table.card td {
-          border: none !important;
-        }
+      
+       
         table.card th {
           background: transparent !important;
         }
-  
+ 
         /* Keep photo alignment */
         .top {
           margin-left: -3mm !important;
         }
-  
+ 
         /* Donor bar black background */
         .donor-bar {
           background: #000 !important;
           color: white !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
+      
         }
         .donor-bar input {
           color: white !important;
@@ -130,7 +199,7 @@
           border: none !important;
           font-weight: bold !important;
         }
-  
+ 
         /* Force exact colors */
         * {
           -webkit-print-color-adjust: exact !important;
@@ -146,22 +215,19 @@
       <img src="head-donor.PNG" alt="School Header" class="header-img" />
     </div>
     <div class="report-title">Progress Report</div>
-    <div class="term-field">
-      <input id="Term" name="Term" type="text" placeholder="e.g., 1st Term Examination"
-             style="border:none;background:transparent;font-weight:bold;text-align:center;width:100%;font-size:14px;" />
-    </div>
-
     <form id="card-form">
       <div class="section-heading">Student Info:</div>
       <hr style="background:#000;height:1px;margin:8px 0;">
       <div class="top">
         <div>
           <div class="grid2">
-            <div class="kv"><label for="RollNo">USS ID:</label><input id="RollNo" name="roll" type="text" required /></div>
-            <div class="kv"><label for="Name">Student Name:</label><input id="Name" name="name" type="text" /></div>
-            <div class="kv"><label for="AdmissionDate">Admission Date:</label><input id="AdmissionDate" name="AdmissionDate" type="text" placeholder="dd-mm-yyyy"/></div>
-            <div class="kv"><label for="Class">Class:</label><input id="Class" name="class" type="text" /></div>
-            <div class="kv"><label for="Session">Session:</label><input id="Session" name="session" type="text" /></div>
+            <div class="kv"><label for="RollNo" style="font-weight: bold; font-size:12px">USS ID:</label><input id="RollNo" name="roll" type="text" required /></div>
+            <div class="kv"><label for="Name"style="font-weight: bold; font-size:12px">Student Name:</label><input id="Name" name="name" type="text" /></div>
+         
+            <div class="kv"><label for="Class"style="font-weight: bold; font-size:12px">Class:</label><input id="Class" name="class" type="text" /></div>
+            <div class="kv"><label for="Session"style="font-weight: bold; font-size:12px">Session:</label><input id="Session" name="session" type="text" /></div>
+            <div class="kv"><label for="Term" style="font-weight: bold; font-size:12px">Term:</label><input id="Term" name="Term" type="text" title="Term" /></div>
+         
           </div>
         </div>
         <div>
@@ -170,26 +236,22 @@
           <input id="studentPhoto" name="photo" type="file" accept="image/*" onchange="onPhotoChange(event)" />
         </div>
       </div>
-
       <div class="report-title">Scores</div>
       <table class="card">
         <thead><tr><th>S.NO</th><th>Subjects</th><th>Total Marks</th><th>Obtained Marks</th></tr></thead>
         <tbody id="subjects-tbody"></tbody>
       </table>
-
       <br>
       <div class="grid2">
         <div class="kv"><label for="Percentage"><b>Percentage:</b></label><u><input id="Percentage" name="Percentage" type="text" readonly /></u></div>
         <div class="kv"><label for="Grade">Grade:</label><input id="Grade" name="Grade" type="text" readonly /></div>
       </div>
-
       <div class="grid2" style="gap:8px 14px; margin-top:10px;">
         <div class="kv" style="grid-column: 1 / span 2;">
           <label for="Remarks">Remarks:</label>
           <input id="Remarks" name="remarks" type="text" class="remarks-input" />
         </div>
       </div>
-
       <div class="grid2" style="margin-top:8px; gap:8px 14px;">
         <div class="kv"><label>Teacher's Sign:</label><div class="signature-line"></div></div>
         <div class="kv"><label>Principal's Sign:</label>
@@ -201,8 +263,8 @@
       </div>
       <div><br></div>
       <div><br></div>
-      <div class="donor-bar">
-        <div> <label style="color: white; font-weight: bold; margin: 0; white-space: nowrap; font-size: 16px;">
+      <div class="donor-bar" >
+        <div> <label style="color: white; font-weight: bold; margin-left: 70px; white-space: nowrap; font-size: 16px;">
           Donor ID :
         </label> <input title="DonorID" name="DonorID" type="text" value="" style="background:transparent;border:none;color:white;font-weight:bold;width:140px;"></div>
         <div> <label style="color: white; font-weight: bold; margin: 0; white-space: nowrap; font-size: 16px;">
@@ -216,31 +278,32 @@
 <div><br></div>
 <div><br></div>
 <div><br></div>
-
-
+<div><br></div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
       <div style="margin-top: 25px; text-align: center; font-size: 16px; color: #686161; line-height: 1.6;">
         <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: nowrap; margin-bottom: 6px;">
-          <span><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1280px-Facebook_f_logo_%282019%29.svg.png" alt="FB" style="width:12px;height:12px;"> /Uniqueschoolsystem1</span><p>         </p><p>         </p><p>         </p>
-          <span><img src="https://cdn-icons-png.flaticon.com/512/15/15874.png" alt="phone" style="width:12px;height:12px;"> +923445153406</span><p>                  </p><p>         </p><p>         </p>
+          <span><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1280px-Facebook_f_logo_%282019%29.svg.png" alt="FB" style="width:12px;height:12px;"> /Uniqueschoolsystem1</span><p> </p><p> </p><p> </p>
+          <span><img src="https://cdn-icons-png.flaticon.com/512/15/15874.png" alt="phone" style="width:12px;height:12px;"> +923445153406</span><p> </p><p> </p>
           <span><img src="https://cdn-icons-png.flaticon.com/512/732/732223.png" alt="email" style="width:12px;height:12px;"> uschools.pk@gmail.com</span>
         </div>
         <div style="font-size: 11px; color: #444;">
           Address : Unique school system, Main Lehtrar road, Punjgran, Islamabad, Pakistan.
         </div>
       </div>
-
       <div class="row-actions no-print">
         <button type="button" class="secondary" onclick="clearForm()">New Student</button>
         <button type="button" class="secondary" onclick="loadByRoll()">Load Student</button>
         <button type="button" onclick="saveData()">Save Data</button>
         <button type="button" class="secondary" onclick="printCard()">Print Card</button>
+      
         <button type="button" style="background-color: #f5f5f5;" ><a href="index.html">Simple Card</a></button>
-        
+       
       </div>
       <div id="status-message"></div>
     </form>
   </div>
-
   <script>
     const MARKS = {
       1: { default: 100, Nazra: 50 },
@@ -255,12 +318,10 @@
       10: { default: 75, Physics: 65, Chemistry: 65, Computer: 65, "Pakistan Studies": 50, Islamiat: 50 },
       11: { default: 100, "Pakistan Studies": 50, Islamiat: 50, "Tarjama-tul-Quran": 50 }
     };
-
     function getSubjectConfig(classNum) {
       classNum = parseInt(classNum) || 0;
       const marks = MARKS[classNum] || { default: 75 };
-
-      if (["Prep", "KG", "Nursery"].includes(String(classNum))) {
+      if (classNum === "Prep" || classNum === "KG" || classNum === "Nursery" || classNum === 0) {
         return [
           {display:"English (Oral)",       field:"EnglishOral",      max:40},
           {display:"English (Written)",    field:"EnglishWritten",   max:60},
@@ -272,7 +333,6 @@
           {display:"Quraan Pak",           field:"Nazra",            max:50}
         ];
       }
-
       if (classNum >= 1 && classNum <= 3) {
         return [
           {display: "Quraan Pak", field: "Nazra", max: marks.Nazra},
@@ -309,7 +369,6 @@
           {display: "Quraan Pak", field: "Nazra", max: marks.Nazra},
         ];
       }
-
       const config = [
         {display: "English", field: "English", max: marks.English || marks.default},
         {display: "Urdu", field: "Urdu", max: marks.Urdu || marks.default},
@@ -324,12 +383,10 @@
       if (classNum === 11) config.push({display: "Statistics", field: "Statistics", max: marks.Statistics || marks.default});
       return config;
     }
-
     function renderSubjects(classNum, studentData = {}) {
       const tbody = document.getElementById('subjects-tbody');
       tbody.innerHTML = '';
       const config = getSubjectConfig(classNum);
-
       config.forEach((sub, i) => {
         const fieldKey = sub.field;
         const obtained = studentData[fieldKey] !== undefined ? studentData[fieldKey] : '';
@@ -342,47 +399,38 @@
         `;
         tbody.appendChild(tr);
       });
-
       const totalRow = document.createElement('tr');
       totalRow.innerHTML = `
-        <td colspan="2"><strong>Total</strong></td>
+        <td colspan="2"><hr><strong>Total</strong></td>
         <td id="MaxMarks" readonly><strong></strong></td>
         <td id="Total" readonly><strong>0</strong></td>
       `;
       tbody.appendChild(totalRow);
-
       calc();
     }
-
     function calc() {
       const rows = Array.from(document.querySelectorAll('table.card tbody tr'));
       let obtainedTotal = 0, maxTotal = 0;
       let passedAll = true;
-
       rows.slice(0, -1).forEach(tr => {
         const capInput = tr.querySelector('td:nth-child(3) input');
         const cap = capInput ? Math.max(0, Number(capInput.value) || 0) : 0;
         maxTotal += cap;
-
         const input = tr.querySelector('td:last-child input');
         let val = input ? Number(input.value) : 0;
         if (!Number.isFinite(val)) val = 0;
         const clamped = Math.max(0, Math.min(cap, val));
         if (input && clamped !== val) input.value = clamped;
         obtainedTotal += clamped;
-
         if (cap > 0) {
           const subjPerc = (clamped / cap) * 100;
           if (subjPerc < 40) passedAll = false;
         }
       });
-
       document.getElementById('MaxMarks').textContent = maxTotal;
       document.getElementById('Total').textContent = obtainedTotal;
-
       const percentage = maxTotal > 0 ? (obtainedTotal / maxTotal) * 100 : 0;
       document.getElementById('Percentage').value = percentage.toFixed(2) + '%';
-
       let grade = 'F';
       if (passedAll) {
         if (percentage > 85) grade = 'A+';
@@ -392,77 +440,133 @@
       } else {
         grade = 'F';
       }
-
       document.getElementById('Grade').value = grade;
     }
-
     async function loadByRoll() {
       const roll = document.getElementById('RollNo').value.trim();
       if (!roll) return alert('Enter USS ID / Roll No');
-
       try {
         const res = await fetch(`/student/${encodeURIComponent(roll)}`);
         if (!res.ok) throw new Error('Not found');
         const data = await res.json();
-
         document.getElementById('RollNo').value = data.roll || roll;
         document.getElementById('Name').value = data.Name || '';
         document.getElementById('Class').value = data.Class || '';
-        document.getElementById('AdmissionDate').value = data.AdmissionDate || '';
+        document.getElementById('Term').value = data.Term || '';
+      
         document.getElementById('Session').value = data.Session || '';
         document.getElementById('Remarks').value = data.Remarks || '';
-
         document.querySelector('input[name="DonorID"]').value = data['Donor ID'] || data.DonorID || '';
         document.querySelector('input[name="DonorName"]').value = data['Donor Name'] || data.DonorName || '';
-
         if (data.ImagePath) {
           document.getElementById('photoPreview').src = data.ImagePath;
         }
-
         renderSubjects(data.Class || 5, data);
         alert('Student loaded successfully!');
       } catch (e) {
         alert('Student not found');
       }
     }
-
     function clearForm() {
       document.getElementById('card-form').reset();
       document.getElementById('photoPreview').src = '';
       renderSubjects(5);
     }
-
     function onPhotoChange(e) {
       if (e.target.files[0]) {
         document.getElementById('photoPreview').src = URL.createObjectURL(e.target.files[0]);
       }
     }
-
     function printCard() { window.print(); }
-
     function openDonorCard() {
       const data = {
         roll: document.getElementById('RollNo').value,
         Name: document.getElementById('Name').value,
         Class: document.getElementById('Class').value,
         Session: document.getElementById('Session').value,
+        Term:document.getElementById('Term').value,
         'Donor ID': document.querySelector('input[name="DonorID"]').value,
         'Donor Name': document.querySelector('input[name="DonorName"]').value,
         ImagePath: document.getElementById('photoPreview').src
       };
-    
+   
       document.querySelectorAll('#subjects-tbody input[name]').forEach(inp => {
         data[inp.name] = inp.value;
       });
-    
+   
       sessionStorage.setItem('donorCardData', JSON.stringify(data));
       window.open('donor-card.html?showDonorBar=true', '_blank');
     }
-
     async function saveData() {
-      alert('Save function ready — connect to your backend');
+      const form = document.getElementById('card-form');
+      const formData = new FormData(form);
+      document.querySelectorAll('.obtained-marks').forEach(inp => {
+        formData.append(inp.name, inp.value);
+      });
+      formData.append('Percentage', document.getElementById('Percentage').value);
+      formData.append('Grade', document.getElementById('Grade').value);
+      formData.append('Donor ID', document.querySelector('input[name="DonorID"]').value);
+      formData.append('Donor Name', document.querySelector('input[name="DonorName"]').value);
+      try {
+        const res = await fetch('/save', {
+          method: 'POST',
+          body: formData
+        });
+        if (res.ok) {
+          document.getElementById('status-message').textContent = 'Saved successfully!';
+          document.getElementById('status-message').style.color = 'green';
+        } else {
+          throw new Error('Save failed');
+        }
+      } catch (e) {
+        document.getElementById('status-message').textContent = 'Error saving: ' + e.message;
+        document.getElementById('status-message').style.color = 'red';
+      }
     }
-
+    async function generatePDF() {
+      const roll = document.getElementById('RollNo').value.trim();
+      if (!roll) return alert('Enter Roll No');
+      const formData = new FormData();
+      formData.append('roll', roll);
+      try {
+        const res = await fetch('/generate-pdf', {
+          method: 'POST',
+          body: formData
+        });
+        if (!res.ok) throw new Error('Failed');
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Result_${roll}.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
+    async function generateDOCX() {
+      const roll = document.getElementById('RollNo').value.trim();
+      if (!roll) return alert('Enter Roll No');
+      const formData = new FormData();
+      formData.append('roll', roll);
+      try {
+        const res = await fetch('/generate', {
+          method: 'POST',
+          body: formData
+        });
+        if (!res.ok) throw new Error('Failed');
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Result_${roll}.docx`;
+        a.click();
+        URL.revokeObjectURL(url);
+      } catch (e) {
+        alert('Error: ' + e.message);
+      }
+    }
     window.onload = () => {
       document.getElementById('Class').addEventListener('change', () => {
         const classNum = document.getElementById('Class').value;
@@ -472,6 +576,4 @@
     };
   </script>
 </body>
-
 </html>
-

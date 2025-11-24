@@ -14,20 +14,20 @@
     }
     .brand { text-align: center; }
     .brand .header-img { max-width: 360px; width: 100%; height: auto; display: block; margin: 0 auto 6px; }
-    .report-title { text-align: center; font-weight: 600; }
+    .report-title { text-align: center; font-weight: 600;font-size: 20px; }
     .term-field { text-align: center; font-weight: bold; margin: 10px 0 15px; font-size: 14px; }
     .section-heading { font-weight: 700; margin: 8px 0 6px; }
     .hr { height: 1px; background: #111; margin: 4px 0 12px; }
     .top { display: grid; grid-template-columns: 1fr 120px; gap: 14px; align-items: start; }
     .photo { width: 120px; height: 120px; border: 1px solid #111; background: #0b5a7a; display: flex; align-items: center; justify-content: center; color: white; overflow: hidden; }
     .photo img { width: 100%; height: 100%; object-fit: cover; }
-    .grid2 { display: grid; grid-template-columns: 1fr  1fr; gap: 6px 14px; }
+    .grid2 { display: grid; grid-template-columns: 1fr  1fr; gap: 6px 14px; font-size: 12px; }
     .kv { display: grid; grid-template-columns: 90px 1fr; align-items: center; }
     .kv label { font-size: 12px; color: #000; }
     input[type="text"], input[type="number"] { width: 100%; padding: 4px 6px; border: 1px dotted #777; font-size: 13px; }
     input[type="file"] { width: 100%; margin-top: 6px; }
     table.card { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; border: 2px solid #111; table-layout: fixed; }
-    table.card th, table.card td { border: 1px dotted #777; padding: 6px 8px; text-align: center; }
+    table.card th, table.card td { border: 1px  #777; padding: 6px 8px; text-align: center; }
     table.card th + th, table.card td + td { border-left: 1px solid #111; }
     table.card td:last-child { border-top: none; border-bottom: none; }
     table.card td:nth-child(3) input,
@@ -111,9 +111,7 @@
         border: 2px solid #111 !important;
         background: transparent !important;
       }
-      table.card th,
-      table.card td {
-        border: none !important;
+    
       }
       table.card th {
         background: transparent !important;
@@ -133,7 +131,7 @@
         margin: 0;
       }
     
-    }
+    
       /* Remove spin buttons in print */
   
     
@@ -261,7 +259,8 @@ function openDonorCard() {
       const totalTr = document.createElement('tr');
       totalTr.innerHTML = `
         <td></td>
-        <td>Total</td>
+      
+        <td><hr style="margin-top:0px"><strong>Total</strong></td>
         <td><input id="MaxMarks" type="number" readonly title="Total maximum marks" /></td>
         <td><input id="Total" name="Total" type="number" readonly title="Total obtained marks" /></td>
       `;
@@ -474,9 +473,7 @@ function openDonorCard() {
     <div class="report-title">Progress Report</div>
 
     <!-- Term Field (Bold, Editable) -->
-    <div class="term-field">
-      <input id="Term" name="Term" type="text" placeholder="e.g., 1st Term Examination" style="border:none; background:transparent; font-weight:bold; text-align:center; width:100%; font-size:14px;" />
-    </div>
+   
 
     <form id="card-form" oninput="calc()">
       <div class="section-heading">Student Info:</div>
@@ -484,12 +481,13 @@ function openDonorCard() {
       <div class="top">
         <div>
           <div class="grid2">
-            <div class="kv"><label for="RollNo" style="font-weight: bold;">USS ID:</label><input id="RollNo" name="roll" type="text" required title="USIS ID / Roll Number" /></div>
+            <div class="kv"><label for="RollNo" style="font-weight: bold; ">USS ID:</label><input id="RollNo" name="roll" type="text" required title="USIS ID / Roll Number" /></div>
             <div class="kv"><label for="Name" style="font-weight: bold;">Student Name:</label><input id="Name" name="name" type="text" title="Student Name" /></div>
             <div class="kv"><label for="Class" style="font-weight: bold;">Class:</label><input id="Class" name="class" type="text" title="Class" /></div>
             <div class="kv"><label for="FatherName" style="font-weight: bold;">Father Name:</label><input id="FatherName" name="fatherName" type="text" title="Father Name" /></div>
             <div class="kv"><label for="Session" style="font-weight: bold;">Session:</label><input id="Session" name="session" type="text" title="Session" /></div>
-</div>
+            <div class="kv"><label for="Term" style="font-weight: bold;">Term:</label><input id="Term" name="Term" type="text" title="Term" /></div>
+          </div>
         </div>
         <div>
           <div class="photo"><img id="photoPreview" alt="Student Photo" /></div>
@@ -551,7 +549,8 @@ function openDonorCard() {
 <div><br></div>
 
 <div><br></div>
-      <!-- EXPANDED FOOTER – FULL WIDTH, BLUE LINE, EXACT IMAGE MATCH -->
+<div><br></div>
+<div><br></div><!-- EXPA<div><br></div>NDED FOOTER – FULL WIDTH, BLUE LINE, EXACT IMAGE MATCH -->
       <div class="footer" style="margin-top: 25px; text-align: center; font-size: 16px; color: #b7b1b1; line-height: 1.6;">
         <!-- Top Blue Line -->
 
