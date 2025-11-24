@@ -36,6 +36,7 @@ const printer = new pdfMake(fonts);
 // === EXCEL → FRONTEND FIELD MAPPING ===
 const EXCEL_TO_FRONTEND = {
   'Roll No': 'roll',
+  'Term':'Term',
   'Name': 'Name',
   'Class': 'Class',
   'Father Name': 'FatherName',
