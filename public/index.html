@@ -38,7 +38,6 @@
     table.card td input { text-align: center; }
     table.card th { background: #f5f5f5; }
 
-    /* === FIXED: Button Row – No Wrap, Clean Layout === */
     .row-actions {
       display: flex;
       flex-wrap: nowrap;
@@ -66,7 +65,6 @@
     .signature-line { border-bottom: 1px dotted #777; height: 20px; }
     .photo-label { display: block; text-align: center; margin-top: 6px; font-size: 12px; color: #1f2937; cursor: pointer; }
 
-    /* Principal Signature with Image */
     .principal-sign { display: flex; align-items: center; gap: 10px; }
     .principal-sign img { width: 150px; height: auto; }
 
@@ -87,54 +85,44 @@
 
       .container {
         border: none !important;
-        padding: 0 12mm !important;        /* EQUAL left & right gap */
-        margin: 0 auto !important;        /* Perfect centering */
-        width: 186mm !important;           /* 210mm – 12mm left – 12mm right */
+        padding: 0 12mm !important;        
+        margin: 0 auto !important;        
+        width: 186mm !important;           
         max-width: none !important;
         box-sizing: border-box !important;
       }
 
-      /* Hide all interactive elements */
       .no-print, .row-actions, input[type="file"], .photo-label, #status-message, #files-note {
         display: none !important;
       }
 
-      /* Clean inputs */
       input, textarea {
         border: none !important;
         background: transparent !important;
         box-shadow: none !important;
       }
 
-      /* Table – outer border only */
       table.card {
         border: 2px solid #111 !important;
         background: transparent !important;
       }
     
-      }
       table.card th {
         background: transparent !important;
       }
 
-      /* Force exact colors */
       * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
         color-adjust: exact !important;
       }
 
-      /* Remove number spinner */
       input[type=number]::-webkit-outer-spin-button,
       input[type=number]::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
       }
-    
-    
-      /* Remove spin buttons in print */
-  
-    
+    }
   </style>
   <script>
     // === TOTAL MARKS PER CLASS ===
@@ -151,59 +139,52 @@
       10: { default: 75, Physics: 65, Chemistry: 65, Computer: 65, PakistanStudies: 50, Islamiat: 50 },
       11: { default: 100, PakistanStudies: 50, Islamiat: 50, Tarjama: 50 }
     };
-function openDonorCard() {
-  const form = document.getElementById('card-form');
-  const data = {};
-  new FormData(form).forEach((v, k) => data[k] = v);
-  const photo = document.getElementById('photoPreview').src;
-  if (photo && !photo.includes('blob:')) data.ImagePath = photo;
 
-  const win = window.open('donor-card.html?roll=' + encodeURIComponent(data.roll || ''), '_blank');
-  win.studentData = data;
-  win.getSubjectConfig = getSubjectConfig;
-}
-    function getSubjectConfig(classNum) {
-      classNum = parseInt(classNum) || 0;
-      const marks = MARKS[classNum] || { default: 75 };
+    function getSubjectConfig(classInput) {
+      const classStr = String(classInput).trim();
+      const num = parseInt(classStr);
+      const marks = MARKS[num] || { default: 75 };
 
-      if (classNum === "Prep" || classNum === "KG" || classNum === "Nursery" || classNum === 0) {
+      // Pre-K and Playgroup
+      if (["Prep", "KG-II", "Nursery", "P.G", "0"].includes(classStr)) {
         return [
-          {display:"English (Oral)",       field:"EnglishOral",      max:40},
-          {display:"English (Written)",    field:"EnglishWritten",   max:60},
-          {display:"Math (Oral)",          field:"MathOral",         max:40},
-          {display:"Math (Written)",       field:"MathWritten",      max:60},
-          {display:"Urdu (Oral)",          field:"UrduOral",         max:40},
-          {display:"Urdu (Written)",       field:"UrduWritten",      max:60},
-          {display:"Drawing",              field:"Drawing",          max:50},
-          {display:"Quraan Pak",           field:"Nazra",            max:50}
+          {display:"English (Oral)", field:"EnglishOral", max:40},
+          {display:"English (Written)", field:"English", max:60},
+          {display:"Math (Oral)", field:"MathOral", max:40},
+          {display:"Math (Written)", field:"Math", max:60},
+          {display:"Urdu (Oral)", field:"UrduOral", max:40},
+          {display:"Urdu (Written)", field:"Urdu", max:60},
+          {display:"Drawing", field:"Drawing", max:50},
+          {display:"Quraan Pak", field:"Nazra", max:50}
         ];
       }
 
-      if (classNum >= 1 && classNum <= 3) {
-        return [
-          {display: "Quraan Pak", field: "Nazra", max: marks.Nazra},
-          {display: "English", field: "English", max: marks.default},
-          {display: "Urdu", field: "Urdu", max: marks.default},
-          {display: "Mathematics", field: "Math", max: marks.default},
-          {display: "Computer", field: "Computer", max: marks.default},
-          {display: "General Knowledge", field: "GeneralKnowledge", max: marks.default},
-          {display: "Islamiyat", field: "Islamiat", max: marks.default},
-          {display: "Summer Task", field: "SummerTask", max: 20},
-        ];
-      }
-      if (classNum >= 4 && classNum <= 5) {
-        return [
-          {display: "Quraan Pak", field: "Nazra", max: marks.Nazra},
-          {display: "English", field: "English", max: marks.default},
-          {display: "Urdu", field: "Urdu", max: marks.default},
-          {display: "Mathematics", field: "Math", max: marks.default},
-          {display: "Computer", field: "Computer", max: marks.default},
-          {display: "Science", field: "Science", max: marks.default},
-          {display: "Social Studies", field: "Sst", max: marks.default},
-          {display: "Islamiyat", field: "Islamiat", max: marks.default},
-        ];
-      }
-      if (classNum >= 6 && classNum <= 7) {
+      // Classes 1–7
+      if (num >= 1 && num <= 7) {
+        if (num <= 3) {
+          return [
+            {display: "Quraan Pak", field: "Nazra", max: marks.Nazra || 50},
+            {display: "English", field: "English", max: marks.default},
+            {display: "Urdu", field: "Urdu", max: marks.default},
+            {display: "Mathematics", field: "Math", max: marks.default},
+            {display: "Computer", field: "Computer", max: marks.default},
+            {display: "General Knowledge", field: "GeneralKnowledge", max: marks.default},
+            {display: "Islamiyat", field: "Islamiat", max: marks.default},
+            {display: "Summer Task", field: "SummerTask", max: 20},
+          ];
+        }
+        if (num <= 5) {
+          return [
+            {display: "Quraan Pak", field: "Nazra", max: marks.Nazra || 50},
+            {display: "English", field: "English", max: marks.default},
+            {display: "Urdu", field: "Urdu", max: marks.default},
+            {display: "Mathematics", field: "Math", max: marks.default},
+            {display: "Computer", field: "Computer", max: marks.default},
+            {display: "Science", field: "Science", max: marks.default},
+            {display: "Social Studies", field: "Sst", max: marks.default},
+            {display: "Islamiyat", field: "Islamiat", max: marks.default},
+          ];
+        }
         return [
           {display: "English", field: "English", max: marks.default},
           {display: "Urdu", field: "Urdu", max: marks.default},
@@ -212,31 +193,91 @@ function openDonorCard() {
           {display: "Computer", field: "Computer", max: marks.default},
           {display: "Geography", field: "Geography", max: marks.default},
           {display: "Islamiyat", field: "Islamiat", max: marks.default},
-          {display: "Quraan Pak", field: "Nazra", max: marks.Nazra},
+          {display: "Quraan Pak", field: "Nazra", max: marks.Nazra || 50},
         ];
       }
 
+      // Arts Group - Exact string match
+      if (classStr === "8 (Arts Group)" || classStr === "9 (Arts Group)" || classStr === "10 (Art Group)") {
+        const config = [
+          {display: "English", field: "English", max: marks.default},
+          {display: "Urdu", field: "Urdu", max: marks.default},
+          {display: "General Math", field: "Math", max: marks.default},
+          {display: "General Science", field: "Science", max: marks.default},
+          {display: "Islamiat Elective", field: "IslamiatElective", max: marks.default},
+          {display: "Homeconomics", field: "Homeconomics", max: marks.default},
+          {display: "Islamiyat", field: "Islamiat", max: marks.Islamiat || marks.default},
+        ];
+        if (classStr !== "10 (Art Group)") {
+          config.push({display: "Tarjama-tul-Quran", field: "Tarjama", max: 50});
+        }
+        if (classStr === "10 (Art Group)") {
+          config.push({display: "Pakistan Studies", field: "PakistanStudies", max: marks.PakistanStudies || marks.default});
+        }
+        return config;
+      }
+
+      // Science Group - When input is exactly "8", "9", or "10"
+      if (classStr === "8" || classStr === "9" || classStr === "10") {
+        const config = [
+          {display: "English", field: "English", max: marks.default},
+          {display: "Urdu", field: "Urdu", max: marks.default},
+          {display: "Mathematics", field: "Math", max: marks.default},
+          {display: "Biology/Computer", field: "Computer", max: marks.Computer || marks.default},
+          {display: "Chemistry", field: "Chemistry", max: marks.Chemistry || marks.default},
+          {display: "Physics", field: "Physics", max: marks.Physics || marks.default},
+          {display: "Islamiyat", field: "Islamiat", max: marks.Islamiat || marks.default},
+        ];
+        if (num <= 9) config.push({display: "Tarjama-tul-Quran", field: "Tarjama", max: marks.Tarjama || 50});
+        config.push({display: "Pakistan Studies", field: "PakistanStudies", max: marks.PakistanStudies || marks.default});
+        return config;
+       
+      }
+      if (classStr === "Tehfeez-ul-Quran") {
+        return [
+          {display: "English", field: "English", max: 100},
+          {display: "Urdu", field: "Urdu", max: 100},
+          {display: "Mathematics", field: "Math", max: 100},
+          {display: "Quraan Pak", field: "Nazra", max: 50},
+          {display: "Tajveed", field: "Tajveed", max: 50},
+        ];
+      }
+
+      // Class 11 (overriding previous fallback for 11)
+      if (classStr === "11") {
+        return [
+          {display: "English", field: "English", max: marks.default},
+          {display: "Urdu", field: "Urdu", max: marks.default},
+          {display: "Mathematics", field: "Math", max: marks.default},
+          {display: "Computer", field: "Computer", max: marks.default},
+          {display: "Statistics", field: "Statistics", max: marks.default},
+          {display: "Pakistan Studies", field: "PakistanStudies", max: marks.PakistanStudies || 50},
+          {display: "Islamiyat", field: "Islamiat", max: marks.Islamiat || 50},
+          {display: "Tarjama-tul-Quran", field: "Tarjama", max: marks.Tarjama || 50},
+        ];
+      }
+
+      // Default / fallback (for any other class)
       const config = [
-        {display: "English", field: "English", max: marks.English || marks.default},
-        {display: "Urdu", field: "Urdu", max: marks.Urdu || marks.default},
-        {display: "Mathematics", field: "Math", max: marks.Math || marks.default},
-        {display: "Biology/Computer", field: "Computer", max: marks.Computer || marks.default},
-        {display: "Chemistry", field: "Chemistry", max: marks.Chemistry || marks.default},
-        {display: "Physics", field: "Physics", max: marks.Physics || marks.default},
+        {display: "English", field: "English", max: marks.default},
+        {display: "Urdu", field: "Urdu", max: marks.default},
+        {display: "General Math", field: "Math", max: marks.default},
+        {display: "General Science", field: "Science", max: marks.default},
+        {display: "Islamiat Elective", field: "IslamiatElective", max: marks.default},
+        {display:"Homeconomics", field: "Homeconomics", max: marks.default},
         {display: "Islamiyat", field: "Islamiat", max: marks.Islamiat || marks.default},
       ];
-      if (classNum <= 9) config.push({display: "Tarjama-tul-Quran", field: "Tarjama", max: marks.Tarjama || 50});
-      if (classNum >= 8) config.push({display: "Pakistan Studies", field: "PakistanStudies", max: marks.PakistanStudies || marks.default});
-      if (classNum === 11) {
-        config.push({display: "Statistics", field: "Statistics", max: marks.Statistics || marks.default});
-      }
+      if (num <= 9) config.push({display: "Tarjama-tul-Quran", field: "Tarjama", max: marks.Tarjama || 50});
+      if (num > 9) config.push({display: "Pakistan Studies", field: "PakistanStudies", max: marks.PakistanStudies || marks.default});
+     
       return config;
     }
+    
 
-    function renderSubjects(classNum, studentData = null) {
+    function renderSubjects(classInput, studentData = null) {
       const tbody = document.getElementById('subjects-tbody');
       tbody.innerHTML = '';
-      const config = getSubjectConfig(classNum);
+      const config = getSubjectConfig(classInput);
 
       config.forEach((sub, index) => {
         const fieldId = `marks-${sub.field}`;
@@ -259,7 +300,6 @@ function openDonorCard() {
       const totalTr = document.createElement('tr');
       totalTr.innerHTML = `
         <td></td>
-      
         <td><hr style="margin-top:0px"><strong>Total</strong></td>
         <td><input id="MaxMarks" type="number" readonly title="Total maximum marks" /></td>
         <td><input id="Total" name="Total" type="number" readonly title="Total obtained marks" /></td>
@@ -278,7 +318,7 @@ function openDonorCard() {
     function clearForm() {
       document.getElementById('card-form').reset();
       document.getElementById('photoPreview').src = '';
-      const classNum = parseInt(document.getElementById('Class').value, 10) || 0;
+      const classNum = document.getElementById('Class').value;
       renderSubjects(classNum);
       showStatus('Form cleared – ready for new student', 'success');
     }
@@ -349,7 +389,7 @@ function openDonorCard() {
           if (el) el.value = s[id] ?? '';
         });
         document.getElementById('RollNo').value = roll;
-        renderSubjects(parseInt(s.Class || 0, 10), s);
+        renderSubjects(s.Class || 0, s);
         if (s.ImagePath) {
           document.getElementById('photoPreview').src = s.ImagePath + '?t=' + Date.now();
         } else {
@@ -428,11 +468,23 @@ function openDonorCard() {
       }, 100);
     }
 
+    function openDonorCard() {
+      const form = document.getElementById('card-form');
+      const data = {};
+      new FormData(form).forEach((v, k) => data[k] = v);
+      const photo = document.getElementById('photoPreview').src;
+      if (photo && !photo.includes('blob:')) data.ImagePath = photo;
+    
+      const win = window.open('donor-card.html?roll=' + encodeURIComponent(data.roll || ''), '_blank');
+      win.studentData = data;
+      win.getSubjectConfig = getSubjectConfig;
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       renderSubjects(0);
       document.getElementById('Class').addEventListener('change', () => {
-        const num = parseInt(document.getElementById('Class').value, 10) || 0;
-        renderSubjects(num);
+        const val = document.getElementById('Class').value;
+        renderSubjects(val);
       });
 
       const note = document.getElementById('files-note');
@@ -452,28 +504,40 @@ function openDonorCard() {
         note.style.color = '#6b7280';
       });
     });
-    function openDonorCard() {
-      const form = document.getElementById('card-form');
-      const data = {};
-      new FormData(form).forEach((v, k) => data[k] = v);
-      const photo = document.getElementById('photoPreview').src;
-      if (photo && !photo.includes('blob:')) data.ImagePath = photo;
-    
-      const win = window.open('donor-card.html?roll=' + encodeURIComponent(data.roll || ''), '_blank');
-      win.studentData = data;
-      win.getSubjectConfig = getSubjectConfig;
-    }
+
+    document.getElementById('excelUpload').addEventListener('change', async function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const fd = new FormData();
+      fd.append('excel', file);
+
+      const btn = this.nextElementSibling;
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Uploading...';
+
+      try {
+        const res = await fetch('/upload-excel', { method: 'POST', body: fd });
+        const j = await res.json();
+        alert(j.ok ? j.message : 'Error: ' + (j.error || 'Unknown'));
+      } catch (err) {
+        alert('Upload failed: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+        e.target.value = '';
+      }
+    });
   </script>
 </head>
 <body>
   <div class="container">
+  <div><br></div>
     <div class="brand">
       <img src="Picture1.jpg" alt="School Header" class="header-img" />
     </div>
     <div class="report-title">Progress Report</div>
-
-    <!-- Term Field (Bold, Editable) -->
-   
 
     <form id="card-form" oninput="calc()">
       <div class="section-heading">Student Info:</div>
@@ -485,7 +549,6 @@ function openDonorCard() {
             <div class="kv"><label for="Name" style="font-weight: bold;">Student Name:</label><input id="Name" name="name" type="text" title="Student Name" /></div>
             <div class="kv"><label for="Class" style="font-weight: bold;">Class:</label><input id="Class" name="class" type="text" title="Class" /></div>
             <div class="kv"><label for="FatherName" style="font-weight: bold;">Father Name:</label><input id="FatherName" name="fatherName" type="text" title="Father Name" /></div>
-            <div class="kv"><label for="Session" style="font-weight: bold;">Session:</label><input id="Session" name="session" type="text" title="Session" /></div>
             <div class="kv"><label for="Term" style="font-weight: bold;">Term:</label><input id="Term" name="Term" type="text" title="Term" /></div>
           </div>
         </div>
@@ -513,13 +576,13 @@ function openDonorCard() {
 <br>
       <div class="grid2">
      
-        <div class="kv"><label for="Percentage">Percentage:</label><input id="Percentage" name="Percentage" type="text" readonly title="Percentage" /></div>
-        <div class="kv"><label for="Grade">Grade:</label><input id="Grade" name="Grade" type="text" readonly title="Grade" /></div>
+        <div class="kv"><label for="Percentage" style="font-weight: bold;">Percentage:</label><input id="Percentage" name="Percentage" type="text" readonly title="Percentage" /></div>
+        <div class="kv"><label for="Grade" style="font-weight: bold;">Grade:</label><input id="Grade" name="Grade" type="text" readonly title="Grade" /></div>
       </div>
 
       <div class="grid2" style="gap:8px 14px; margin-top:10px;">
         <div class="kv" style="grid-column: 1 / span 2;">
-          <label for="Remarks">Remarks:</label>
+          <label for="Remarks" style="font-weight: bold;">Remarks:</label>
           <input id="Remarks" name="remarks" type="text" class="remarks-input" title="Remarks" />
         </div>
       </div>
@@ -527,11 +590,11 @@ function openDonorCard() {
       <!-- Principal Signature with Image -->
       <div class="grid2" style="margin-top:8px; gap:8px 14px;">
         <div class="kv">
-          <label>Teacher's Sign:</label>
+          <label style="font-weight: bold;">Teacher's Sign:</label>
           <div class="signature-line"></div>
         </div>
         <div class="kv">
-          <label>Principal's Sign:</label>
+          <label style="font-weight:bold ;">Principal's Sign:</label>
           <div class="principal-sign">
             <img src="sign.PNG" alt="Principal Signature" />
             <div class="signature-line"></div>
@@ -549,72 +612,41 @@ function openDonorCard() {
 <div><br></div>
 
 <div><br></div>
-<div><br></div>
-<div><br></div><!-- EXPA<div><br></div>NDED FOOTER – FULL WIDTH, BLUE LINE, EXACT IMAGE MATCH -->
-      <div class="footer" style="margin-top: 25px; text-align: center; font-size: 16px; color: #b7b1b1; line-height: 1.6;">
-        <!-- Top Blue Line -->
 
-        <!-- Contact Line -->
-        <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: nowrap; margin-bottom: 6px; font-weight: 500;">
-          <span style="white-space: nowrap; display: flex; align-items: center; gap: 6px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1280px-Facebook_f_logo_%282019%29.svg.png" alt="FB" style="width:16px; height:16px;">
-            /Uniqueschoolsystem1
-          </span><p>                  </p><p>         </p><p>         </p>
-          <span style="white-space: nowrap; display: flex; align-items: center; gap: 6px;">
-            <img src="https://cdn-icons-png.flaticon.com/512/15/15874.png" alt="Phone" style="width:16px; height:16px;">
-            +923445153406
-          </span><p>                  </p><p>         </p><p>         </p><p>         </p>
-          <span style="white-space: nowrap; display: flex; align-items: center; gap: 6px;">
-            <img src="https://cdn-icons-png.flaticon.com/512/732/732223.png" alt="Email" style="width:16px; height:16px;">
-            uschools.pk@gmail.com
-          </span>
-        </div>
+<div class="footer" style="margin-top: 25px; text-align: center; font-size: 16px; color: #b7b1b1; line-height: 1.6;">
+  <!-- Top Blue Line -->
 
-        <!-- Address Line -->
-        <div style="font-size: 11px; color: #b7b1b1;">
-          Address : Unique school system, Main Lehtrar road , Punigran , Islamabad , Pakistan.
-        </div>
-      </div>
+  <!-- Contact Line -->
+  <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: nowrap; margin-bottom: 6px; font-weight: 500;">
+    <span style="white-space: nowrap; display: flex; align-items: center; gap: 6px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1280px-Facebook_f_logo_%282019%29.svg.png" alt="FB" style="width:16px; height:16px;">
+      /Uniqueschoolsystem1
+    </span><p>                  </p><p>         </p><p>         </p>
+    <span style="white-space: nowrap; display: flex; align-items: center; gap: 6px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/15/15874.png" alt="Phone" style="width:16px; height:16px;">
+      +923445153406
+    </span><p>                  </p><p>         </p><p>         </p><p>         </p>
+    <span style="white-space: nowrap; display: flex; align-items: center; gap: 6px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/732/732223.png" alt="Email" style="width:16px; height:16px;">
+      uschools.pk@gmail.com
+    </span>
+  </div>
 
-      <!-- FIXED: Button Row -->
+  <!-- Address Line -->
+  <div style="font-size: 11px; color: #b7b1b1;">
+    Address : Unique school system, Main Lehtrar road , Punigran , Islamabad , Pakistan.
+  </div>
+</div>
       <div class="row-actions no-print">
         <button type="button" class="secondary" onclick="clearForm()">New Student</button>
         <button type="button" class="secondary" onclick="loadByRoll()">Load Student</button>
         <button type="button" onclick="saveData()">Save Data</button>
         <button type="button" class="secondary" onclick="openDonorCard()">Print Donor Card</button>
         <button type="button" class="secondary" onclick="printCard()">Print Card</button>
-        <!-- Add this inside your .row-actions div -->
-<input type="file" id="excelUpload" accept=".xlsx,.xls" style="display:none;" />
-<button type="button" class="secondary" onclick="document.getElementById('excelUpload').click()">
-  Upload & Merge Excel
-</button>
-
-<script>
-document.getElementById('excelUpload').addEventListener('change', async function(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const fd = new FormData();
-  fd.append('excel', file);
-
-  const btn = this.nextElementSibling;
-  const originalText = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = 'Uploading...';
-
-  try {
-    const res = await fetch('/upload-excel', { method: 'POST', body: fd });
-    const j = await res.json();
-    alert(j.ok ? j.message : 'Error: ' + (j.error || 'Unknown'));
-  } catch (err) {
-    alert('Upload failed: ' + err.message);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = originalText;
-    e.target.value = '';
-  }
-});
-</script>
+        <input type="file" id="excelUpload" accept=".xlsx,.xls" style="display:none;" />
+        <button type="button" class="secondary" onclick="document.getElementById('excelUpload').click()">
+          Upload & Merge Excel
+        </button>
       </div>
 
       <div id="status-message"></div>

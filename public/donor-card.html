@@ -23,11 +23,12 @@
     .report-title { text-align: center; font-weight: 600; font-size: 20px; }
     .term-field { text-align: center; font-weight: bold; margin: 10px 0 15px; font-size: 14px; }
     .section-heading { font-weight: 700; margin: 8px 0 6px; font-size: 14px; }
-    .top { display: grid;
-      grid-template-columns: 1fr 135px; /* was 120px → now 135px */
-      gap: 8px; /* reduced gap from 14px → 8px */
+    .top { 
+      display: grid;
+      grid-template-columns: 1fr 135px;
+      gap: 8px;
       align-items: start;
-      margin-left: -12px;}
+    }
     .photo { width: 120px; height: 120px; border: 1px solid #111; background: #0b5a7a; display: flex; align-items: center; justify-content: center; color: white; overflow: hidden; }
     .photo img { width: 100%; height: 100%; object-fit: cover; }
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
@@ -60,7 +61,7 @@
     .photo-label { display: block; text-align: center; margin-top: 6px; font-size: 12px; color: #1f2937; cursor: pointer; }
     .principal-sign { display: flex; align-items: center; gap: 10px; }
     .principal-sign img { width: 150px; height: auto; }
-    .donor-bar { background: #000; color: #fff; padding: 5px 0; font-weight: bold; font-size: 14px; margin: 25px 0 15px; display: flex; gap: 60px; align-items: center;}
+    .donor-bar { background: #000; color: #fff; padding: 5px 0; font-weight: bold; font-size: 14px; margin: 25px 0 15px; display: flex; gap: 60px; align-items: center; justify-content: center; }
     .donor-bar input { font-size: 14px !important; }
     .footer { margin-top: 20px; text-align: center; font-size: 15px; color: #333; line-height: 1.6; }
     .footer .social { display: flex; justify-content: center; gap: 25px; flex-wrap: nowrap; margin-bottom: 8px; font-size: 15px; }
@@ -129,9 +130,9 @@
         .donor-bar {
           display: flex !important;
           flex-direction: row !important;
-          justify-content: flex-start !important;
+          justify-content: center !important;
           align-items: center !important;
-          gap: 20px !important;
+          gap: 60px !important;
           background: black !important;
           color: white !important;
           padding: 5px 20px !important;
@@ -180,9 +181,9 @@
           background: transparent !important;
         }
  
-        /* Keep photo alignment */
+        /* Keep photo alignment - removed negative margin for perfect equal margins */
         .top {
-          margin-left: -3mm !important;
+          margin-left: 0 !important;
         }
  
         /* Donor bar black background */
@@ -212,10 +213,14 @@
 <body>
   <div class="container">
     <div class="brand">
+      <div><br>
+      </div>
       <img src="head-donor.PNG" alt="School Header" class="header-img" />
     </div>
     <div class="report-title">Progress Report</div>
     <form id="card-form">
+      <div><br></div>
+      <div><br></div>
       <div class="section-heading">Student Info:</div>
       <hr style="background:#000;height:1px;margin:8px 0;">
       <div class="top">
@@ -230,12 +235,13 @@
          
           </div>
         </div>
-        <div>
+        <div style="margin-left: 15px;">
           <div class="photo"><img id="photoPreview" alt="Student Photo" /></div>
           <label for="studentPhoto" class="photo-label">Upload Photo</label>
           <input id="studentPhoto" name="photo" type="file" accept="image/*" onchange="onPhotoChange(event)" />
         </div>
       </div>
+      <div><br></div>
       <div class="report-title">Scores</div>
       <table class="card">
         <thead><tr><th>S.NO</th><th>Subjects</th><th>Total Marks</th><th>Obtained Marks</th></tr></thead>
@@ -244,17 +250,17 @@
       <br>
       <div class="grid2">
         <div class="kv"><label for="Percentage"><b>Percentage:</b></label><u><input id="Percentage" name="Percentage" type="text" readonly /></u></div>
-        <div class="kv"><label for="Grade">Grade:</label><input id="Grade" name="Grade" type="text" readonly /></div>
+        <div class="kv"><label for="Grade" style="font-weight: bold;">Grade:</label><input id="Grade" name="Grade" type="text" readonly /></div>
       </div>
       <div class="grid2" style="gap:8px 14px; margin-top:10px;">
         <div class="kv" style="grid-column: 1 / span 2;">
-          <label for="Remarks">Remarks:</label>
+          <label for="Remarks" style="font-weight: bold;">Remarks:</label>
           <input id="Remarks" name="remarks" type="text" class="remarks-input" />
         </div>
       </div>
       <div class="grid2" style="margin-top:8px; gap:8px 14px;">
-        <div class="kv"><label>Teacher's Sign:</label><div class="signature-line"></div></div>
-        <div class="kv"><label>Principal's Sign:</label>
+        <div class="kv"><label style="font-weight: bold;">Teacher's Sign:</label><div class="signature-line"></div></div>
+        <div class="kv"><label style="font-weight: bold;">Principal's Sign:</label>
           <div class="principal-sign">
             <img src="sign.PNG" alt="Principal Signature" />
             <div class="signature-line"></div>
@@ -263,35 +269,39 @@
       </div>
       <div><br></div>
       <div><br></div>
-      <div class="donor-bar" >
-        <div> <label style="color: white; font-weight: bold; margin-left: 70px; white-space: nowrap; font-size: 16px;">
-          Donor ID :
-        </label> <input title="DonorID" name="DonorID" type="text" value="" style="background:transparent;border:none;color:white;font-weight:bold;width:140px;"></div>
-        <div> <label style="color: white; font-weight: bold; margin: 0; white-space: nowrap; font-size: 16px;">
-          Name :
-        </label> <input title="DonorName" name="DonorName" type="text" value="" style="background:transparent;border:none;color:white;font-weight:bold;width:260px;"></div>
-      </div>
-<div><br></div>
-<div><br></div>
-<div><br></div>
-<div><br></div>
-<div><br></div>
-<div><br></div>
-<div><br></div>
-<div><br></div>
-<div><br></div>
-<div><br></div>
-<div><br></div>
-      <div style="margin-top: 25px; text-align: center; font-size: 16px; color: #686161; line-height: 1.6;">
-        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: nowrap; margin-bottom: 6px;">
-          <span><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1280px-Facebook_f_logo_%282019%29.svg.png" alt="FB" style="width:12px;height:12px;"> /Uniqueschoolsystem1</span><p> </p><p> </p><p> </p>
-          <span><img src="https://cdn-icons-png.flaticon.com/512/15/15874.png" alt="phone" style="width:12px;height:12px;"> +923445153406</span><p> </p><p> </p>
-          <span><img src="https://cdn-icons-png.flaticon.com/512/732/732223.png" alt="email" style="width:12px;height:12px;"> uschools.pk@gmail.com</span>
+      <div class="donor-bar">
+        <div style="margin-left: -30px;"> 
+          <label style="color: white; font-weight: bold; white-space: nowrap; font-size: 16px;">
+            Donor ID :
+          </label> 
+          <input title="DonorID" name="DonorID" type="text" value="" style="background:transparent;border:none;color:white;font-weight:bold;width:140px;">
         </div>
-        <div style="font-size: 11px; color: #444;">
-          Address : Unique school system, Main Lehtrar road, Punjgran, Islamabad, Pakistan.
+        <div> 
+          <label style="color: white; font-weight: bold; white-space: nowrap; font-size: 16px;">
+            Name :
+          </label> 
+          <input title="DonorName" name="DonorName" type="text" value="" style="background:transparent;border:none;color:white;font-weight:bold;width:260px;">
         </div>
       </div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+<div><br></div>
+
+
+<div style="margin-top: 25px; text-align: center; font-size: 16px; color: #686161; line-height: 1.6;">
+  <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: nowrap; margin-bottom: 6px;">
+    <span><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/1280px-Facebook_f_logo_%282019%29.svg.png" alt="FB" style="width:12px;height:12px;"> /Uniqueschoolsystem1</span><p> </p><p> </p><p> </p>
+    <span><img src="https://cdn-icons-png.flaticon.com/512/15/15874.png" alt="phone" style="width:12px;height:12px;"> +923445153406</span><p> </p><p> </p>
+    <span><img src="https://cdn-icons-png.flaticon.com/512/732/732223.png" alt="email" style="width:12px;height:12px;"> uschools.pk@gmail.com</span>
+  </div>
+  <div style="font-size: 11px; color: #444;">
+    Address : Unique school system, Main Lehtrar road, Punjgran, Islamabad, Pakistan.
+  </div>
+</div>
       <div class="row-actions no-print">
         <button type="button" class="secondary" onclick="clearForm()">New Student</button>
         <button type="button" class="secondary" onclick="loadByRoll()">Load Student</button>
@@ -318,46 +328,50 @@
       10: { default: 75, Physics: 65, Chemistry: 65, Computer: 65, "Pakistan Studies": 50, Islamiat: 50 },
       11: { default: 100, "Pakistan Studies": 50, Islamiat: 50, "Tarjama-tul-Quran": 50 }
     };
-    function getSubjectConfig(classNum) {
-      classNum = parseInt(classNum) || 0;
-      const marks = MARKS[classNum] || { default: 75 };
-      if (classNum === "Prep" || classNum === "KG" || classNum === "Nursery" || classNum === 0) {
+
+    function getSubjectConfig(classInput) {
+      const classStr = String(classInput).trim();
+      const num = parseInt(classStr);
+      const marks = MARKS[num] || { default: 75 };
+
+      if (["Prep", "KG-II", "Nursery", "P.G", "0"].includes(classStr)) {
         return [
-          {display:"English (Oral)",       field:"EnglishOral",      max:40},
-          {display:"English (Written)",    field:"EnglishWritten",   max:60},
-          {display:"Math (Oral)",          field:"MathOral",         max:40},
-          {display:"Math (Written)",       field:"MathWritten",      max:60},
-          {display:"Urdu (Oral)",          field:"UrduOral",         max:40},
-          {display:"Urdu (Written)",       field:"UrduWritten",      max:60},
-          {display:"Drawing",              field:"Drawing",          max:50},
-          {display:"Quraan Pak",           field:"Nazra",            max:50}
+          {display:"English (Oral)", field:"EnglishOral", max:40},
+          {display:"English (Written)", field:"English", max:60},
+          {display:"Math (Oral)", field:"MathOral", max:40},
+          {display:"Math (Written)", field:"Math", max:60},
+          {display:"Urdu (Oral)", field:"UrduOral", max:40},
+          {display:"Urdu (Written)", field:"Urdu", max:60},
+          {display:"Drawing", field:"Drawing", max:50},
+          {display:"Quraan Pak", field:"Nazra", max:50}
         ];
       }
-      if (classNum >= 1 && classNum <= 3) {
-        return [
-          {display: "Quraan Pak", field: "Nazra", max: marks.Nazra},
-          {display: "English", field: "English", max: marks.default},
-          {display: "Urdu", field: "Urdu", max: marks.default},
-          {display: "Mathematics", field: "Math", max: marks.default},
-          {display: "Computer", field: "Computer", max: marks.default},
-          {display: "General Knowledge", field: "GeneralKnowledge", max: marks.default},
-          {display: "Islamiyat", field: "Islamiat", max: marks.default},
-          {display: "Summer Task", field: "SummerTask", max: 20},
-        ];
-      }
-      if (classNum >= 4 && classNum <= 5) {
-        return [
-          {display: "Quraan Pak", field: "Nazra", max: marks.Nazra},
-          {display: "English", field: "English", max: marks.default},
-          {display: "Urdu", field: "Urdu", max: marks.default},
-          {display: "Mathematics", field: "Math", max: marks.default},
-          {display: "Computer", field: "Computer", max: marks.default},
-          {display: "Science", field: "Science", max: marks.default},
-          {display: "Social Studies", field: "Sst", max: marks.default},
-          {display: "Islamiyat", field: "Islamiat", max: marks.default},
-        ];
-      }
-      if (classNum >= 6 && classNum <= 7) {
+      // Classes 1–7
+      if (num >= 1 && num <= 7) {
+        if (num <= 3) {
+          return [
+            {display: "Quraan Pak", field: "Nazra", max: marks.Nazra || 50},
+            {display: "English", field: "English", max: marks.default},
+            {display: "Urdu", field: "Urdu", max: marks.default},
+            {display: "Mathematics", field: "Math", max: marks.default},
+            {display: "Computer", field: "Computer", max: marks.default},
+            {display: "General Knowledge", field: "GeneralKnowledge", max: marks.default},
+            {display: "Islamiyat", field: "Islamiat", max: marks.default},
+            {display: "Summer Task", field: "SummerTask", max: 20},
+          ];
+        }
+        if (num <= 5) {
+          return [
+            {display: "Quraan Pak", field: "Nazra", max: marks.Nazra || 50},
+            {display: "English", field: "English", max: marks.default},
+            {display: "Urdu", field: "Urdu", max: marks.default},
+            {display: "Mathematics", field: "Math", max: marks.default},
+            {display: "Computer", field: "Computer", max: marks.default},
+            {display: "Science", field: "Science", max: marks.default},
+            {display: "Social Studies", field: "Sst", max: marks.default},
+            {display: "Islamiyat", field: "Islamiat", max: marks.default},
+          ];
+        }
         return [
           {display: "English", field: "English", max: marks.default},
           {display: "Urdu", field: "Urdu", max: marks.default},
@@ -366,27 +380,86 @@
           {display: "Computer", field: "Computer", max: marks.default},
           {display: "Geography", field: "Geography", max: marks.default},
           {display: "Islamiyat", field: "Islamiat", max: marks.default},
-          {display: "Quraan Pak", field: "Nazra", max: marks.Nazra},
+          {display: "Quraan Pak", field: "Nazra", max: marks.Nazra || 50},
         ];
       }
+      // Arts Group - Exact string match
+      if (classStr === "8 (Arts Group)" || classStr === "9 (Arts Group)" || classStr === "10 (Art Group)") {
+        const config = [
+          {display: "English", field: "English", max: marks.default},
+          {display: "Urdu", field: "Urdu", max: marks.default},
+          {display: "General Math", field: "Math", max: marks.default},
+          {display: "General Science", field: "Science", max: marks.default},
+          {display: "Islamiat Elective", field: "IslamiatElective", max: marks.default},
+          {display: "Homeconomics", field: "Homeconomics", max: marks.default},
+          {display: "Islamiyat", field: "Islamiat", max: marks.Islamiat || marks.default},
+        ];
+        if (classStr !== "10 (Art Group)") {
+          config.push({display: "Tarjama-tul-Quran", field: "Tarjama", max: 50});
+        }
+        if (classStr === "10 (Art Group)") {
+          config.push({display: "Pakistan Studies", field: "PakistanStudies", max: marks.PakistanStudies || marks.default});
+        }
+        return config;
+      }
+      // Science Group - When input is exactly "8", "9", or "10"
+      if (classStr === "8" || classStr === "9" || classStr === "10") {
+        const config = [
+          {display: "English", field: "English", max: marks.default},
+          {display: "Urdu", field: "Urdu", max: marks.default},
+          {display: "Mathematics", field: "Math", max: marks.default},
+          {display: "Biology/Computer", field: "Computer", max: marks.Computer || marks.default},
+          {display: "Chemistry", field: "Chemistry", max: marks.Chemistry || marks.default},
+          {display: "Physics", field: "Physics", max: marks.Physics || marks.default},
+          {display: "Islamiyat", field: "Islamiat", max: marks.Islamiat || marks.default},
+        ];
+        if (num <= 9) config.push({display: "Tarjama-tul-Quran", field: "Tarjama", max: marks.Tarjama || 50});
+        config.push({display: "Pakistan Studies", field: "PakistanStudies", max: marks.PakistanStudies || marks.default});
+        return config;
+      
+      }
+      if (classStr === "Tehfeez-ul-Quran") {
+        return [
+          {display: "English", field: "English", max: 100},
+          {display: "Urdu", field: "Urdu", max: 100},
+          {display: "Mathematics", field: "Math", max: 100},
+          {display: "Quraan Pak", field: "Nazra", max: 50},
+          {display: "Tajveed", field: "Tajveed", max: 50},
+        ];
+      }
+      // Class 11 (overriding previous fallback for 11)
+      if (classStr === "11") {
+        return [
+          {display: "English", field: "English", max: marks.default},
+          {display: "Urdu", field: "Urdu", max: marks.default},
+          {display: "Mathematics", field: "Math", max: marks.default},
+          {display: "Computer", field: "Computer", max: marks.default},
+          {display: "Statistics", field: "Statistics", max: marks.default},
+          {display: "Pakistan Studies", field: "PakistanStudies", max: marks.PakistanStudies || 50},
+          {display: "Islamiyat", field: "Islamiat", max: marks.Islamiat || 50},
+          {display: "Tarjama-tul-Quran", field: "Tarjama", max: marks.Tarjama || 50},
+        ];
+      }
+      // Default / fallback (for any other class)
       const config = [
-        {display: "English", field: "English", max: marks.English || marks.default},
-        {display: "Urdu", field: "Urdu", max: marks.Urdu || marks.default},
-        {display: "Mathematics", field: "Math", max: marks.Math || marks.default},
-        {display: "Biology/Computer", field: "Computer", max: marks.Computer || marks.default},
-        {display: "Chemistry", field: "Chemistry", max: marks.Chemistry || marks.default},
-        {display: "Physics", field: "Physics", max: marks.Physics || marks.default},
+        {display: "English", field: "English", max: marks.default},
+        {display: "Urdu", field: "Urdu", max: marks.default},
+        {display: "General Math", field: "Math", max: marks.default},
+        {display: "General Science", field: "Science", max: marks.default},
+        {display: "Islamiat Elective", field: "IslamiatElective", max: marks.default},
+        {display:"Homeconomics", field: "Homeconomics", max: marks.default},
         {display: "Islamiyat", field: "Islamiat", max: marks.Islamiat || marks.default},
       ];
-      if (classNum <= 9) config.push({display: "Tarjama-tul-Quran", field: "Tarjama-tul-Quran", max: marks["Tarjama-tul-Quran"] || 50});
-      if (classNum >= 8) config.push({display: "Pakistan Studies", field: "PakistanStudies", max: marks["Pakistan Studies"] || marks.default});
-      if (classNum === 11) config.push({display: "Statistics", field: "Statistics", max: marks.Statistics || marks.default});
+      if (num <= 9) config.push({display: "Tarjama-tul-Quran", field: "Tarjama", max: marks.Tarjama || 50});
+      if (num > 9) config.push({display: "Pakistan Studies", field: "PakistanStudies", max: marks.PakistanStudies || marks.default});
+    
       return config;
     }
-    function renderSubjects(classNum, studentData = {}) {
+
+    function renderSubjects(classInput, studentData = {}) {
       const tbody = document.getElementById('subjects-tbody');
       tbody.innerHTML = '';
-      const config = getSubjectConfig(classNum);
+      const config = getSubjectConfig(classInput);
       config.forEach((sub, i) => {
         const fieldKey = sub.field;
         const obtained = studentData[fieldKey] !== undefined ? studentData[fieldKey] : '';
