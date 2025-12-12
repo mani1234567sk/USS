@@ -43,7 +43,10 @@ const EXCEL_TO_FRONTEND = {
   'Admission Date':'AdmissionDate',
   'Session': 'Session',
   'Semester': 'Semester',
+  'Tajveed': 'Tajveed',
+ 
   'Remarks': 'Remarks',
+
   'Total': 'Total',
   'Percentage': 'Percentage',
   'Grade': 'Grade',
@@ -60,10 +63,11 @@ const EXCEL_TO_FRONTEND = {
   'Summer Task': 'SummerTask',
   'Chemistry': 'Chemistry',
   'Physics': 'Physics',
+  'Islamiat Elective': 'IslamiatElective',
   'Biology': 'Biology',
   'Genral Math': 'GenralMath',
   'Genral Science': 'GenralScience',
-  'Homecnomics': 'Homecnomics',
+  'Homeconomics': 'Homecnomics',
   'Statistics': 'Statistics',
   'Pakistan Studies': 'PakistanStudies',
   'Tarjama-tul-Quran': 'Tarjama',
